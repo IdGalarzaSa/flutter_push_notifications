@@ -1,4 +1,4 @@
-package com.example.flutter_push_notifications
+package com.galarzaSaavedraIvan.notifications
 
 import io.flutter.embedding.android.FlutterActivity
 
