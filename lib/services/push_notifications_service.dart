@@ -6,11 +6,30 @@ class PushNotifications {
   static FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
   static String? token;
 
+  // background
+  static Future _backgroundHandler(RemoteMessage message) async {
+    print('onBackground message: ${message.messageId}');
+  }
+
+  //
+  static Future _onMessageHandler(RemoteMessage message) async {
+    print('onBackground message: ${message.messageId}');
+  }
+
+  // foreground
+  static Future _onMessageOpenApp(RemoteMessage message) async {
+    print('onBackground message: ${message.messageId}');
+  }
+
   static Future initializePushNotifications() async {
     // Inicializamos los servicios de firebase
     await Firebase.initializeApp();
 
-    token = await firebaseMessaging.getToken();
+    token = await FirebaseMessaging.instance.getToken();
     print(token);
+
+    FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
+    FirebaseMessaging.onMessage.listen(_onMessageHandler);
+    FirebaseMessaging.onMessageOpenedApp.listen(_onMessageOpenApp);
   }
 }
