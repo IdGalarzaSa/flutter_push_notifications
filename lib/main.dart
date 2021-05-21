@@ -16,12 +16,35 @@ void main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final GlobalKey<NavigatorState> navigatorKey =
+      new GlobalKey<NavigatorState>();
+  final GlobalKey<ScaffoldMessengerState> messengerKey =
+      new GlobalKey<ScaffoldMessengerState>();
+
+  @override
+  void initState() {
+    super.initState();
+
+    PushNotifications.messageStream.listen((message) {
+      navigatorKey.currentState?.pushNamed('message', arguments: message);
+      final SnackBar snackBar = new SnackBar(content: Text('$message'));
+      messengerKey.currentState?.showSnackBar(snackBar);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Material App',
       initialRoute: 'home',
+      scaffoldMessengerKey: messengerKey,
+      navigatorKey: navigatorKey,
       routes: {
         'home': (_) => HomeScreen(),
         'message': (_) => MessageScreen(),
